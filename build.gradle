@@ -1,0 +1,123 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.liquibase:liquibase-gradle-plugin:$liquibase_version"
+    }
+}
+
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'groovy'
+    id 'org.liquibase.gradle' version '2.0.1'
+    id 'nu.studer.jooq' version '3.0.3'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:26.0-jre'
+    implementation "com.h2database:h2:$hbase_version"
+    implementation 'org.jooq:jooq'
+
+    implementation 'commons-dbcp:commons-dbcp:1.4'
+    implementation 'com.sparkjava:spark-core:2.7.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+
+    compileOnly "org.projectlombok:lombok:$lombok_version"
+    annotationProcessor "org.projectlombok:lombok:$lombok_version"
+
+    implementation 'log4j:log4j:1.2.16'
+    implementation 'org.slf4j:slf4j-log4j12:1.7.5'
+
+    // Use the latest Groovy version for Spock testing
+    testImplementation 'org.codehaus.groovy:groovy-all:2.5.4'
+    testImplementation 'io.rest-assured:rest-assured:3.3.0'
+
+    // Use the awesome Spock testing and specification framework even with Java
+    testImplementation 'org.spockframework:spock-core:1.2-groovy-2.5'
+    testImplementation 'cglib:cglib-nodep:3.2.4'
+    testImplementation 'org.objenesis:objenesis:2.5.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.liquibase:liquibase-cdi:$liquibase_version_core"
+
+    liquibaseRuntime "org.liquibase:liquibase-core:$liquibase_version_core"
+    liquibaseRuntime "org.liquibase:liquibase-groovy-dsl:$liquibase_version"
+    liquibaseRuntime "com.h2database:h2:$hbase_version"
+
+    jooqRuntime "com.h2database:h2:$hbase_version"
+}
+
+liquibase {
+    activities {
+        main {
+            changeLogFile 'liquibase/changelog.xml'
+            url 'jdbc:h2:./db/djss-db'
+            username 'sa'
+            password ''
+        }
+    }
+}
+
+jooq {
+    version = '3.11.9'
+    edition = 'OSS'
+    djss(sourceSets.main) {
+        jdbc {
+            driver = 'org.h2.Driver'
+            url = 'jdbc:h2:./db/djss-db'
+            user = 'sa'
+            password = ''
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = 'org.jooq.meta.h2.H2Database'
+                inputSchema = 'PUBLIC'
+                forcedTypes {
+                    forcedType {
+                        userType = 'com.github.kgrech.djss.jooq.TransferStatus'
+                        converter = 'com.github.kgrech.djss.jooq.TranserStatusConverter'
+                        expression = 'PUBLIC\\.TRANSFER\\.STATUS'
+                        types = '.*'
+                    }
+                }
+            }
+            generate {
+                relations = true
+                deprecated = false
+                records = true
+                pojos = true
+                fluentSetters = true
+            }
+            target {
+                packageName = 'com.github.kgrech.djss.jooq'
+            }
+        }
+    }
+}
+
+test {
+    include '**/RestApiSuite.groovy'
+}
+
+task restApiTest(type: Test) {
+    include '**/ProcessingSuite.groovy'
+}
+
+task end2EndTest(type: Test) {
+    include '**/End2EndTest.groovy'
+}
+
+
+// Define the main class for the application
+mainClassName = 'com.github.kgrech.djss.App'
