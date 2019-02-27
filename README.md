@@ -33,16 +33,16 @@ Line coverage is 86%
 Execute ``gradle run`` command to run the application.
 The following restfull API are availble:
 - Accounts
--- Add a new account: POST ``http://{{host}}:{{port}}/accounts/``
--- Get page of accounts: GET ``http://{{host}}:{{port}}/accounts/?page={{page}}&pageSize={{pageSize}}``
--- Get account by id: PUT ``http://{{host}}:{{port}}/accounts/{{id}}``
--- Update an existing account: POST ``http://{{host}}:{{port}}/accounts/{{id}}``
--- Delete the account: DELETE ``http://{{host}}:{{port}}/accounts/{{id}}``
+  - Add a new account: POST ``http://{{host}}:{{port}}/accounts/``
+  - Get page of accounts: GET ``http://{{host}}:{{port}}/accounts/?page={{page}}&pageSize={{pageSize}}``
+  - Get account by id: PUT ``http://{{host}}:{{port}}/accounts/{{id}}``
+  - Update an existing account: POST ``http://{{host}}:{{port}}/accounts/{{id}}``
+  - Delete the account: DELETE ``http://{{host}}:{{port}}/accounts/{{id}}``
 
 - Transfers
--- Add a new transfer: POST ``http://{{host}}:{{port}}/transfers/``
--- Get page of transfers: GET ``http://{{host}}:{{port}}/transfers/?page={{page}}&pageSize={{pageSize}}``
--- Get transfer by id: PUT ``http://{{host}}:{{port}}/transfers/{{id}}``
--- Update an existing transfer: POST ``http://{{host}}:{{port}}/transfers/{{id}}``
--- Delete the transfer: DELETE ``http://{{host}}:{{port}}/transfers/{{id}}``
+  - Add a new transfer: POST ``http://{{host}}:{{port}}/transfers/``
+  - Get page of transfers: GET ``http://{{host}}:{{port}}/transfers/?page={{page}}&pageSize={{pageSize}}``
+  - Get transfer by id: PUT ``http://{{host}}:{{port}}/transfers/{{id}}``
+  - Update an existing transfer: POST ``http://{{host}}:{{port}}/transfers/{{id}}``
+  - Delete the transfer: DELETE ``http://{{host}}:{{port}}/transfers/{{id}}``
 The requests are availbile in the postman collection
