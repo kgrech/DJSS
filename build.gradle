@@ -107,15 +107,15 @@ jooq {
 }
 
 test {
-    include '**/RestApiSuite.groovy'
+    include '**/RestApiSuite*'
 }
 
 task restApiTest(type: Test) {
-    include '**/ProcessingSuite.groovy'
+    include '**/ProcessingSuite*'
 }
 
 task end2EndTest(type: Test) {
-    include '**/End2EndTest.groovy'
+    include '**/End2EndSuite*'
 }
 
 
